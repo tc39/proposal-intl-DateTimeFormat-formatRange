@@ -131,3 +131,7 @@ Drawbacks:
     [NSDateIntervalFormatter](https://developer.apple.com/documentation/foundation/nsdateintervalformatter)
 *   Closure
     [goog.i18n.DateIntervalFormat](https://google.github.io/closure-library/api/goog.i18n.DateIntervalFormat.html)
+
+## Discussion
+
+https://github.com/tc39/ecma402/issues/188
