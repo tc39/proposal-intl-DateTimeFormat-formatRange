@@ -82,15 +82,15 @@ console.log(fmt.formatRange(date1, date2));
 fmt.formatRangeToParts(date1, date2);
 // return value:
 // [
-//   { type: 'hour',      value: '10'  },
-//   { type: 'literal',   value: ':'   },
-//   { type: 'minute',    value: '00'  },
-//   { type: 'literal',   value: ' – ' },
-//   { type: 'hour',      value: '11'  },
-//   { type: 'literal',   value: ':'   },
-//   { type: 'minute',    value: '00'  },
-//   { type: 'literal',   value: ' '   },
-//   { type: 'dayPeriod', value: 'AM'  }
+//   { type: 'hour',      value: '10'  source: "startRange" },
+//   { type: 'literal',   value: ':'   source: "startRange" },
+//   { type: 'minute',    value: '00'  source: "startRange" },
+//   { type: 'literal',   value: ' – ' source: "shared"     },
+//   { type: 'hour',      value: '11'  source: "endRange"   },
+//   { type: 'literal',   value: ':'   source: "endRange"   },
+//   { type: 'minute',    value: '00'  source: "endRange"   },
+//   { type: 'literal',   value: ' '   source: "shared"     },
+//   { type: 'dayPeriod', value: 'AM'  source: "shared"     }
 // ]
 ```
 
