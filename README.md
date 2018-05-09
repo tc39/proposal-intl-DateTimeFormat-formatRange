@@ -1,6 +1,71 @@
 # `Intl.DateTimeFormat.prototype.formatRange`
 
-## Proposal \[Stage 0\]
+## Overview
+
+### Motivation
+
+It's common for websites to display date intervals or date ranges to show the
+span of an event, such as a hotel reservation, the billing period of a
+service, or other similar uses. In order to implement this, websites often
+use localization libraries, such as Google Closure, to format the date range,
+or they may simply resort to formatting both dates independently.
+
+If following the second alternative, web developers may encounter problems such
+as repeating fields that are common between the two dates, inappropriate order
+of the dates for the locale or using an incorrect delimiter for the locale.
+
+For example:
+
+```javascript
+let date1 = new Date(Date.UTC(2007, 0, 10)); // "Jan 10, 2007"
+let date2 = new Date(Date.UTC(2007, 0, 20)); // "Jan 20, 2007"
+
+let fmt = new Intl.DateTimeFormat('en', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+});
+
+// The second date's 'month' and 'year' calendar fields are redundant, only
+// 'day' provides new information.
+console.log(`${fmt.format(date1)} – ${fmt.format(date2)}`);
+// > 'January 10, 2007 – January 20, 2007'
+```
+
+Formatting date ranges in a concise and locale-aware way requires a
+non-negligible amount of raw or compiled data: localized patterns are needed for
+all the possible combinations of displayed calendar fields (e.g. `month`, `day`,
+`hour`), their lengths (e.g. `2-digit`, `numeric`) and which is the largest
+different calendar field between the range's two dates.
+
+For example, formatting the following ranges using the same options (`{year:
+'numeric', month: 'short', day: 'numeric'}`) requires two different patterns:
+
+Date range from **January 10, 2017** to **January 20, 2017**:
+
+* `'Jan 10 – 20, 2007'`
+* Largest different calendar field: `'day'`
+
+Date range from **January 10, 2017** to **February 20, 2017**:
+
+* `'Jan 10 – Feb 20, 2007'`
+* Largest different calendar field: `'month'`
+
+Bringing this functionality into the platform will improve performance of the
+web and developer productivity as they will be able to format date ranges
+correctly, flexibly and concisely without the extra locale data size and
+overhead.
+
+### Status
+
+**Stage 0**
+
+* Discussion: https://github.com/tc39/ecma402/issues/188
+
+## Proposal
+
+Add `formatRange(date1, date2)` and `formatRangeToParts(date1, date2)` to
+`Intl.DateTimeFormat` to enable date range formatting.
 
 This proposal is based on the ICU Date Interval Formatter and on the Unicode
 CLDR TR-35 spec on date intervals.
@@ -19,7 +84,7 @@ way based on the `locale` and `options` provided when instantiating
 #### `Intl.DateTimeFormat.prototype.formatRangeToParts(date1, date2)`
 
 This method receives two `Dates` and returns an `Array` of objects containing
-the locale-specific tokens representing each parts of the formatted date range.
+the locale-specific tokens representing each part of the formatted date range.
 
 See:
 [`Intl.DateTimeFormat.prototype.formatToParts`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/formatToParts).
@@ -82,15 +147,15 @@ console.log(fmt.formatRange(date1, date2));
 fmt.formatRangeToParts(date1, date2);
 // return value:
 // [
-//   { type: 'hour',      value: '10'  source: "startRange" },
-//   { type: 'literal',   value: ':'   source: "startRange" },
-//   { type: 'minute',    value: '00'  source: "startRange" },
-//   { type: 'literal',   value: ' – ' source: "shared"     },
-//   { type: 'hour',      value: '11'  source: "endRange"   },
-//   { type: 'literal',   value: ':'   source: "endRange"   },
-//   { type: 'minute',    value: '00'  source: "endRange"   },
-//   { type: 'literal',   value: ' '   source: "shared"     },
-//   { type: 'dayPeriod', value: 'AM'  source: "shared"     }
+//   { type: 'hour',      value: '10',  source: "startRange" },
+//   { type: 'literal',   value: ':',   source: "startRange" },
+//   { type: 'minute',    value: '00',  source: "startRange" },
+//   { type: 'literal',   value: ' – ', source: "shared"     },
+//   { type: 'hour',      value: '11',  source: "endRange"   },
+//   { type: 'literal',   value: ':',   source: "endRange"   },
+//   { type: 'minute',    value: '00',  source: "endRange"   },
+//   { type: 'literal',   value: ' ',   source: "shared"     },
+//   { type: 'dayPeriod', value: 'AM',  source: "shared"     }
 // ]
 ```
 
@@ -114,9 +179,10 @@ Benefits:
 
 Drawbacks:
 
-*   Support for ranges can be added to other formatters (e.g Intl.NumberFormat)
-    by simply providing a `.formatRange()` method, avoiding the need to create
-    an additional range formatter for every regular formatter.
+*   Support for ranges can be added to other formatters (e.g
+    `Intl.NumberFormat`) by simply providing a `.formatRange()` method, avoiding
+    the need to create an additional range formatter for every regular
+    formatter.
 *   The `options` used to instantiate a `Intl.DateIntervalFormat` are the same
     ones used for
     [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat).
@@ -131,7 +197,3 @@ Drawbacks:
     [NSDateIntervalFormatter](https://developer.apple.com/documentation/foundation/nsdateintervalformatter)
 *   Closure
     [goog.i18n.DateIntervalFormat](https://google.github.io/closure-library/api/goog.i18n.DateIntervalFormat.html)
-
-## Discussion
-
-https://github.com/tc39/ecma402/issues/188
