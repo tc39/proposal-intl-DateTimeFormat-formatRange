@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "ecma402-intl-DateTimeFormat-formatRange",
+  "description": "Proposal to add formatRange and formatRangeToParts to DateTimeFormat.",
+  "scripts": {
+    "build": "ecmarkup spec.emu > out/index.html"
+  },
+  "homepage": "https://github.com/fabalbon/proposal-intl-DateTimeFormat-formatRange#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabalbon/proposal-intl-DateTimeFormat-formatRange.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "ecmarkup": "^3.11.5"
+  }
+}
