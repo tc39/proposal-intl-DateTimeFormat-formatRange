@@ -408,20 +408,27 @@ contributors: Felipe Balbontín
         1. <ins>Let _pattern_ be _dateTimeFormat_.[[Pattern]].</ins>
         1. <ins>Let _rangePatterns_ be _dateTimeFormat_.[[RangePatterns]].</ins>
         1. <ins>Let _dateFieldsPracticallyEqual_ be *true*.</ins>
-        1. <ins>While _rangePattern_ is *undefined*, repeat for each row of <emu-xref href="#table-datetimeformat-rangepatternfields"></emu-xref>, except the header row</ins>
+        1. <ins>Let _patternContainsLargerDateField_ be *false*.</ins>
+        1. <ins>While _dateFieldsPracticallyEqual_ is *true* and _patternContainsLargerDateField_ is *false*, repeat for each row of <emu-xref href="#table-datetimeformat-rangepatternfields"></emu-xref>, except the header row</ins>
           1. <ins>Let _fieldName_ be the name given in the Range Pattern Field column of the row.</ins>
           1. <ins>If _fieldName_ is equal to AmPm, then</ins>
             1. <ins>Let _v1_ be _tm1_.[[Hour]].</ins>
             1. <ins>Let _v2_ be _tm2_.[[Hour]].</ins>
+            1. <ins>Let _rp_ be _rangePatterns_.[[AmPm]].</ins>
             1. <ins>If _v1_ is greater than 11 and _v2_ less or equal than 11, or _v1_ is less or equal than 11 and _v2_ is greater than 11, then</ins>
-              1. <ins>Let _rangePattern_ be _rangePatterns_.[[AmPm]].</ins>
               1. <ins>Set _dateFieldsPracticallyEqual_ to *false*.</ins>
+            1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
+              1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
+            1. <ins>Let _rangePattern_ be _rp_.</ins>
           1. <ins>Else,</ins>
             1. <ins>Let _v1_ be _tm1_.[[<_fieldName_>]].</ins>
             1. <ins>Let _v2_ be _tm2_.[[<_fieldName_>]].</ins>
+            1. <ins>Let _rp_ be _rangePatterns_.[[<_fieldName_>]].</ins>
             1. <ins>If _v1_ is not equal to _v2_, then</ins>
-              1. <ins>Let _rangePattern_ be _rangePatterns_.[[<_fieldName_>]].</ins>
               1. <ins>Set _dateFieldsPracticallyEqual_ to *false*.</ins>
+            1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
+              1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
+            1. <ins>Let _rangePattern_ be _rp_.</ins>
         1. <ins>If _dateFieldsPracticallyEqual_ is *true*, then</ins>
           1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _pattern_, _tm1_).</ins>
           1. <ins>For each _r_ in _result_ do</ins>
@@ -660,10 +667,55 @@ contributors: Felipe Balbontín
       </ul>
 
       <p>
-        EXAMPLE     An implementation might include the following record as part of its English locale data: {[[hour]]: `"numeric"`, [[minute]]: `"2-digit"`, [[second]]: `"2-digit"`, [[pattern]]: `"{hour}:{minute}:{second}"`, [[pattern12]]: `"{hour}:{minute}:{second} {ampm}"`}.
+        EXAMPLE     An implementation might include the following record as part of its English locale data:
+        <ul>
+          <li><ins>[[year]]: `"2-digit"`</ins></li>
+          <li><ins>[[month]]: `"numeric"`</ins></li>
+          <li><ins>[[day]]: `"numeric"`</ins></li>
+          <li><ins>[[hour]]: `"numeric"`</ins></li>
+          <li><ins>[[minute]]: `"numeric"`</ins></li>
+          <li><ins>[[pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`</ins></li>
+          <li><ins>[[pattern12]]: `"{day}/{month}/{year}, {hour}:{minute} {ampm}"`</ins></li>
+          <li><ins>[[rangePattern]]: </ins></li>
+          <ul>
+            <li><ins>[[Hour]]:</ins><ul>
+              <li><ins>{[[Source]]: `"startRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" – "`}</ins></li>
+              <li><ins>{[[Source]]: `"endRange"`, [[Pattern]]: `"{hour}:{minute}"`}</ins></li>
+            </ul></li>
+            <li><ins>[[Minute]]:</ins><ul>
+              <li><ins>{[[Source]]: `"startRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" – "`}</ins></li>
+              <li><ins>{[[Source]]: `"endRange"`, [[Pattern]]: `"{hour}:{minute}"`}</ins></li>
+            </ul></li>
+            <li><ins>[[Default]]:</ins><ul>
+              <li><ins>{[[Source]]: `"startRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" – "`}</ins></li>
+              <li><ins>{[[Source]]: `"endRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`}</ins></li>
+            </ul></li>
+          </ul>
+          <li><ins>[[rangePattern12]]:</ins>
+          <ul>
+            <li><ins>[[Hour]]:</ins><ul>
+              <li><ins>{[[Source]]: `"startRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" – "`}</ins></li>
+              <li><ins>{[[Source]]: `"endRange"`, [[Pattern]]: `"{hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" {ampm}"`}</ins></li>
+            </ul></li>
+            <li><ins>[[Minute]]:</ins><ul>
+              <li><ins>{[[Source]]: `"startRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" – "`}</ins></li>
+              <li><ins>{[[Source]]: `"endRange"`, [[Pattern]]: `"{hour}:{minute}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" {ampm}"`}</ins></li>
+            </ul></li>
+            <li><ins>[[Default]]:</ins><ul>
+              <li><ins>{[[Source]]: `"startRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute} {ampm}"`}</ins></li>
+              <li><ins>{[[Source]]: `"shared"`, [[Pattern]]: `" – "`}</ins></li>
+              <li><ins>{[[Source]]: `"endRange"`, [[Pattern]]: `"{day}/{month}/{year}, {hour}:{minute} {ampm}"`}</ins></li>
+            </ul></li>
+          </ul></li>
+        </ul>
       </p>
-
-      <ins>*TODO:* Add [[rangePattern]] to *EXAMPLE*.</ins>
 
       <emu-note>
         It is recommended that implementations use the locale data provided by the Common Locale Data Repository (available at <a href="http://cldr.unicode.org/">http://cldr.unicode.org/</a>).
