@@ -806,7 +806,7 @@ contributors: Felipe Balbontín
           1. <ins>Let _y_ be Call(%Date_now%, *undefined*).</ins>
         1. <ins>Else,</ins>
           1. <ins>Let _y_ be ? ToNumber(_endDate_).</ins>
-        1. <ins>*TODO:* Should a *RangeError* be thrown if _x_ is greater than _y_?</ins>
+        1. <ins>If _x_ is greater than _y_, throw a *RangeError* exception.</ins>
         1. <ins>Return ? FormatDateTimeRange(_dtf_, _x_, _y_).</ins>
       </emu-alg>
     </emu-clause>
@@ -830,7 +830,7 @@ contributors: Felipe Balbontín
           1. <ins>Let _y_ be Call(%Date_now%, *undefined*).</ins>
         1. <ins>Else,</ins>
           1. <ins>Let _y_ be ? ToNumber(_endDate_).</ins>
-        1. <ins>*TODO:* Should a *RangeError* be thrown if _x_ is greater than _y_?</ins>
+        1. <ins>If _x_ is greater than _y_, throw a *RangeError* exception.</ins>
         1. <ins>Return ? FormatDateTimeRangeToParts(_dtf_, _x_, _y_).</ins>
       </emu-alg>
     </emu-clause>    
