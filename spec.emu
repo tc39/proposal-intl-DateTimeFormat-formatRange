@@ -7,9 +7,9 @@
 title: Add formatRange and formatRangeToParts to DateTimeFormat
 status: proposal
 stage: 2
-location: https://github.com/tc39-transfer/proposal-intl-DateTimeFormat-formatRange
+location: https://github.com/tc39/proposal-intl-DateTimeFormat-formatRange
 copyright: true
-contributors: Felipe Balbontín
+contributors: Google, Ecma International
 </pre>
 
 <emu-clause id="datetimeformat-objects">

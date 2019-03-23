@@ -5,10 +5,10 @@
   "scripts": {
     "build": "ecmarkup spec.emu > out/index.html"
   },
-  "homepage": "https://github.com/fabalbon/proposal-intl-DateTimeFormat-formatRange#readme",
+  "homepage": "https://github.com/tc39/proposal-intl-DateTimeFormat-formatRange#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fabalbon/proposal-intl-DateTimeFormat-formatRange.git"
+    "url": "git+https://github.com/tc39/proposal-intl-DateTimeFormat-formatRange.git"
   },
   "license": "MIT",
   "devDependencies": {
