@@ -5,7 +5,10 @@
 <script src="./spec.js"></script>
 <pre class="metadata">
 title: Add formatRange and formatRangeToParts to DateTimeFormat
-stage: 0
+status: proposal
+stage: 2
+location: https://github.com/tc39-transfer/proposal-intl-DateTimeFormat-formatRange
+copyright: true
 contributors: Felipe Balbontín
 </pre>
 
