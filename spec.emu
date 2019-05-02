@@ -439,7 +439,7 @@ contributors: Google, Ecma International
           1. <ins>Return _result_.</ins>
         1. <ins>Let _result_ be a new empty List.</ins>
         1. <ins>If _rangePattern_ is *undefined*, then</ins>
-          1. <ins>Let _rangePattern_ be _rangePattern_.[[Default]].</ins>
+          1. <ins>Let _rangePattern_ be _rangePatterns_.[[Default]].</ins>
         1. <ins>For each _rangePatternPart_ in _rangePattern_, do</ins>
           1. <ins>Let _pattern_ be _rangePatternPart_.[[Pattern]].</ins>
           1. <ins>Let _source_ be _rangePatternPart_.[[Source]]</ins>
