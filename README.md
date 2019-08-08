@@ -58,7 +58,7 @@ overhead.
 
 ### Status
 
-**Stage 2**
+**Stage 3**
 
 * Initial Discussion: https://github.com/tc39/ecma402/issues/188
 
