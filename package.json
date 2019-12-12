@@ -3,7 +3,7 @@
   "name": "ecma402-intl-DateTimeFormat-formatRange",
   "description": "Proposal to add formatRange and formatRangeToParts to DateTimeFormat.",
   "scripts": {
-    "build": "ecmarkup spec.emu > out/index.html"
+    "build": "ecmarkup spec.emu > index.html"
   },
   "homepage": "https://github.com/tc39/proposal-intl-DateTimeFormat-formatRange#readme",
   "repository": {
