@@ -854,7 +854,7 @@ contributors: Google, Ecma International
         1. <ins>Let _dtf_ be *this* value.</ins>
         1. <ins>If Type(_dtf_) is not Object, throw a *TypeError* exception.</ins>
         1. <ins>If _dtf_ does not have an [[InitializedDateTimeFormat]] internal slot, throw a *TypeError* exception.</ins>
-        1. <ins>If _startDate_ is *undefined* or _endDate_ is *undefined*, throw a *RangeError* exception.</ins>
+        1. <ins>If _startDate_ is *undefined* or _endDate_ is *undefined*, throw a *TypeError* exception.</ins>
         1. <ins>Let _x_ be ? ToNumber(_startDate_).</ins>
         1. <ins>Let _y_ be ? ToNumber(_endDate_).</ins>
         1. <ins>If _x_ is greater than _y_, throw a *RangeError* exception.</ins>
@@ -873,7 +873,7 @@ contributors: Google, Ecma International
         1. <ins>Let _dtf_ be *this* value.</ins>
         1. <ins>If Type(_dtf_) is not Object, throw a *TypeError* exception.</ins>
         1. <ins>If _dtf_ does not have an [[InitializedDateTimeFormat]] internal slot, throw a *TypeError* exception.</ins>
-        1. <ins>If _startDate_ is *undefined* or _endDate_ is *undefined*, throw a *RangeError* exception.</ins>
+        1. <ins>If _startDate_ is *undefined* or _endDate_ is *undefined*, throw a *TypeError* exception.</ins>
         1. <ins>Let _x_ be ? ToNumber(_startDate_).</ins>
         1. <ins>Let _y_ be ? ToNumber(_endDate_).</ins>
         1. <ins>If _x_ is greater than _y_, throw a *RangeError* exception.</ins>
