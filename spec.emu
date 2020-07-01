@@ -6,7 +6,7 @@
 <pre class="metadata">
 title: Add formatRange and formatRangeToParts to DateTimeFormat
 status: proposal
-stage: 2
+stage: 3
 location: https://github.com/tc39/proposal-intl-DateTimeFormat-formatRange
 copyright: true
 contributors: Google, Ecma International
