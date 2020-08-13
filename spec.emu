@@ -290,10 +290,10 @@ contributors: Google, Ecma International
     </emu-clause>
 
     <emu-clause id="sec-formatdatetimepattern" aoid="FormatDateTimePattern">
-      <h1><ins>FormatDateTimePattern ( _dateTimeFormat_, _patternParts_, _x_ )</ins></h1>
+      <h1><ins>FormatDateTimePattern ( _dateTimeFormat_, _patternParts_, _x_, _rangeFormatOptions_ )</ins></h1>
 
       <p>
-        <ins>The FormatDateTimePattern abstract operation is called with arguments _dateTimeFormat_ (which must be an object initialized as a DateTimeFormat), _patternParts_ (which is a list of Records as returned by PartitionPattern) and _x_ (which must be a Number value), interprets _x_ as a time value as specified in ES2015, <emu-xref href="#sec-time-values-and-time-range"></emu-xref>, and creates the corresponding parts according _pattern_ and to the effective locale and the formatting options of _dateTimeFormat_. The following steps are taken:</ins>
+        <ins>The FormatDateTimePattern abstract operation is called with arguments _dateTimeFormat_ (which must be an object initialized as a DateTimeFormat), _patternParts_ (which is a list of Records as returned by PartitionPattern), _x_ (which must be a Number value) and _rangeFormatOptions_ (which is a range pattern Record as used in [[rangePattern]] or *undefined*), interprets _x_ as a time value as specified in ES2015, <emu-xref href="#sec-time-values-and-time-range"></emu-xref>, and creates the corresponding parts according _pattern_ and to the effective locale and the formatting options of _dateTimeFormat_ and _rangeFormatOptions_. The following steps are taken:</ins>
       </p>
 
       <emu-alg>
@@ -326,7 +326,8 @@ contributors: Google, Ecma International
             1. Let _fv_ be FormatNumeric(_nf3_, _v_).
             1. Append a new Record { [[Type]]: *"fractionalSecond"*, [[Value]]: _fv_ } as the last element of _result_.
           1. Else if _p_ matches a Property column of the row in <emu-xref href="#table-datetimeformat-components"></emu-xref>, then
-            1. Let _f_ be the value of _dateTimeFormat_'s internal slot whose name is the Internal Slot column of the matching row.
+            1. <ins>If _rangeFormatOptions_ is not *undefined*, let _f_ be the value of _rangeFormatOptions_'s field whose name matches _p_.</ins>
+            1. <ins>Else,</ins> let _f_ be the value of _dateTimeFormat_'s internal slot whose name is the Internal Slot column of the matching row.
             1. Let _v_ be the value of _tm_'s field whose name is the Internal Slot column of the matching row.
             1. If _p_ is *"year"* and _v_ ≤ 0, let _v_ be 1 - _v_.
             1. If _p_ is *"month"*, increase _v_ by 1.
@@ -381,7 +382,7 @@ contributors: Google, Ecma International
 
       <emu-alg>
         1. Let _patternParts_ be PartitionPattern(_dateTimeFormat_.[[Pattern]]).
-        1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _x_).</ins>
+        1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _x_, *undefined*).</ins>
         1. Return _result_.
       </emu-alg>
 
@@ -484,14 +485,14 @@ contributors: Google, Ecma International
         1. <ins>If _dateFieldsPracticallyEqual_ is *true*, then</ins>
           1. <ins>Let _pattern_ be _dateTimeFormat_.[[Pattern]].</ins>
           1. <ins>Let _patternParts_ be PartitionPattern(_pattern_).</ins>
-          1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _x_).</ins>
+          1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _x_, *undefined*).</ins>
           1. <ins>For each _r_ in _result_ do</ins>
             1. <ins>Set _r_.[[Source]] to *"shared"*.</ins>
           1. <ins>Return _result_.</ins>
         1. <ins>Let _result_ be a new empty List.</ins>
         1. <ins>If _rangePattern_ is *undefined*, then</ins>
           1. <ins>Let _rangePattern_ be _rangePatterns_.[[Default]].</ins>
-        1. <ins>For each _rangePatternPart_ in _rangePattern_, do</ins>
+        1. <ins>For each _rangePatternPart_ in _rangePattern_.[[PatternParts]], do</ins>
           1. <ins>Let _pattern_ be _rangePatternPart_.[[Pattern]].</ins>
           1. <ins>Let _source_ be _rangePatternPart_.[[Source]]</ins>
           1. <ins>If _source_ is *"startRange"* or *"shared"*, then</ins>
@@ -499,7 +500,7 @@ contributors: Google, Ecma International
           1. <ins>Else,</ins>
             1. <ins>Let _z_ be _y_.</ins>
           1. <ins>Let _patternParts_ be PartitionPattern(_pattern_).</ins>
-          1. <ins>Let _partResult_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _z_).</ins>
+          1. <ins>Let _partResult_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _z_, _rangePatternPart_).</ins>
           1. <ins>For each _r_ in _partResult_, do</ins>
             1. <ins>Set _r_.[[Source]] to _source_.</ins>
           1. <ins>Add all elements in _partResult_ to _result_ in order.</ins>
@@ -774,13 +775,17 @@ contributors: Google, Ecma International
             <li>
               <ins>A [[rangePatterns]] field with a Record value<ins>
                 <ul>
-                  <li><ins>The [[rangePatterns]] record may have any of the fields in <emu-xref href="#table-datetimeformat-rangepatternfields"></emu-xref>, where each field represents a range pattern and it's value is a list of Records.</ins>
+                  <li><ins>The [[rangePatterns]] record may have any of the fields in <emu-xref href="#table-datetimeformat-rangepatternfields"></emu-xref>, where each field represents a range pattern and it's value is a Record.</ins>
                     <ul>                  
                       <li><ins>The name of the field indicates the largest calendar element that must be different between the start and end dates in order to use this range pattern. For example, if the field name is Month, it contains the range pattern that should be used to format a date range where the Era and Year values are the same, but Month value is different.</ins></li>
-                      <li><ins>Each element of the list is a record representing a part of the range pattern. Each record contains a [[Pattern]] field and a [[Source]] field. The [[Pattern]] field's value is a String of the same format as the regular date pattern String. The [[Source]] field must contain one of the following values *"shared"*, *"startRange"* or *"endRange"* which indicates which of the range's dates should be formatted using the value of the Pattern field.</ins></li> 
+                      <li><ins>The record will contain the following fields:</ins></li>
+                        <ul>
+                          <li><ins>A subset of the fields shown in the Property column of <emu-xref href="#table-datetimeformat-components"></emu-xref>, where each field must have one of the values specified for that field in the Values column of <emu-xref href="#table-datetimeformat-components"></emu-xref>. Only the fields required to format a date with any of the PatternParts will be added.</ins></li>
+                          <li><ins>A [[PatternParts]] field whose value is a list of Records each representing a part of the range pattern. Each record contains a [[Pattern]] field and a [[Source]] field. The [[Pattern]] field's value is a String of the same format as the regular date pattern String. The [[Source]] field must contain one of the following values *"shared"*, *"startRange"* or *"endRange"* which indicates which of the range's dates should be formatted using the value of the Pattern field.</li></ins>
+                        </ul>
                     </ul>
                   </li>
-                  <li><ins>The [[rangePatterns]] record must have a [[Default]] field which contains the default range pattern used when the specific range pattern is not available. It's value is a list of records with the same structure as the other fields in the [[rangePatterns]] record.</ins></li>                  
+                  <li><ins>The [[rangePatterns]] record must have a [[Default]] field which contains the default range pattern used when the specific range pattern is not available. It's value is a list of records with the same structure as the other fields in the [[rangePatterns]] record.</ins></li>
                 </ul>
             </li>
             <li><ins>If the record has an hour field, it must also have a [[rangePatterns12]] field. It's value is similar to the Record in [[rangePatterns]], but it uses a String similar to [[pattern12]] for each part of the range pattern.</ins></li>
@@ -803,39 +808,87 @@ contributors: Google, Ecma International
           <li><ins>[[rangePatterns]]: </ins></li>
           <ul>
             <li><ins>[[Hour]]:</ins><ul>
-              <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
-              <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
+              <li><ins>[[year]]: *"2-digit"*</ins></li>
+              <li><ins>[[month]]: *"numeric"*</ins></li>
+              <li><ins>[[day]]: *"numeric"*</ins></li>
+              <li><ins>[[hour]]: *"numeric"*</ins></li>
+              <li><ins>[[minute]]: *"numeric"*</ins></li>
+              <li><ins>[[PatternParts]]:</ins></li>
+              <ul>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
+                <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
+              </ul>
             </ul></li>
             <li><ins>[[Minute]]:</ins><ul>
-              <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
-              <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
+              <li><ins>[[year]]: *"2-digit"*</ins></li>
+              <li><ins>[[month]]: *"numeric"*</ins></li>
+              <li><ins>[[day]]: *"numeric"*</ins></li>
+              <li><ins>[[hour]]: *"numeric"*</ins></li>
+              <li><ins>[[minute]]: *"numeric"*</ins></li>
+              <li><ins>[[PatternParts]]:</ins></li>
+              <ul>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
+                <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
+              </ul>
             </ul></li>
             <li><ins>[[Default]]:</ins><ul>
-              <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
-              <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+              <li><ins>[[year]]: *"2-digit"*</ins></li>
+              <li><ins>[[month]]: *"numeric"*</ins></li>
+              <li><ins>[[day]]: *"numeric"*</ins></li>
+              <li><ins>[[hour]]: *"numeric"*</ins></li>
+              <li><ins>[[minute]]: *"numeric"*</ins></li>
+              <li><ins>[[PatternParts]]:</ins></li>
+              <ul>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
+                <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+              </ul>
             </ul></li>
           </ul>
           <li><ins>[[rangePatterns12]]:</ins>
           <ul>
             <li><ins>[[Hour]]:</ins><ul>
-              <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
-              <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" {ampm}"*}</ins></li>
+              <li><ins>[[year]]: *"2-digit"*</ins></li>
+              <li><ins>[[month]]: *"numeric"*</ins></li>
+              <li><ins>[[day]]: *"numeric"*</ins></li>
+              <li><ins>[[hour]]: *"numeric"*</ins></li>
+              <li><ins>[[minute]]: *"numeric"*</ins></li>
+              <li><ins>[[PatternParts]]:</ins></li>
+              <ul>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
+                <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" {ampm}"*}</ins></li>
+              </ul>
             </ul></li>
             <li><ins>[[Minute]]:</ins><ul>
-              <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
-              <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" {ampm}"*}</ins></li>
+              <li><ins>[[year]]: *"2-digit"*</ins></li>
+              <li><ins>[[month]]: *"numeric"*</ins></li>
+              <li><ins>[[day]]: *"numeric"*</ins></li>
+              <li><ins>[[hour]]: *"numeric"*</ins></li>
+              <li><ins>[[minute]]: *"numeric"*</ins></li>
+              <li><ins>[[PatternParts]]:</ins></li>
+              <ul>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
+                <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" {ampm}"*}</ins></li>
+              </ul>
             </ul></li>
             <li><ins>[[Default]]:</ins><ul>
-              <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute} {ampm}"*}</ins></li>
-              <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
-              <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute} {ampm}"*}</ins></li>
+              <li><ins>[[year]]: *"2-digit"*</ins></li>
+              <li><ins>[[month]]: *"numeric"*</ins></li>
+              <li><ins>[[day]]: *"numeric"*</ins></li>
+              <li><ins>[[hour]]: *"numeric"*</ins></li>
+              <li><ins>[[minute]]: *"numeric"*</ins></li>
+              <li><ins>[[PatternParts]]:</ins></li>
+              <ul>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute} {ampm}"*}</ins></li>
+                <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
+                <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute} {ampm}"*}</ins></li>
+              </ul>
             </ul></li>
           </ul></li>
         </ul>
