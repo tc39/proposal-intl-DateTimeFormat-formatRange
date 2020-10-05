@@ -341,7 +341,7 @@ contributors: Google, Ecma International
             1. Else if _f_ is *"2-digit"*, then
               1. Let _fv_ be FormatNumeric(_nf2_, _v_).
               1. If the *"length"* property of _fv_ is greater than 2, let _fv_ be the substring of _fv_ containing the last two characters.
-            1. Else if _f_ is *"narrow"*, *"short"*, or *"long"*, then let _fv_ be a String value representing _f_ in the desired form; the String value depends upon the implementation and the effective locale and calendar of _dateTimeFormat_. If _p_ is *"month"*, then the String value may also depend on whether _dateTimeFormat_ has a [[Day]] internal slot. If _p_ is *"timeZoneName"*, then the String value may also depend on the value of the [[InDST]] field of _tm_. If _p_ is *"era"*, then the String value may also depend on whether _dateTimeFormat_ has a [[Era]] internal slot and if the implementation does not have a localized representation of _f_, then use _f_ itself.
+            1. Else if _f_ is *"narrow"*, *"short"*, or *"long"*, then let _fv_ be a String value representing _f_ in the desired form; the String value depends upon the implementation and the effective locale and calendar of _dateTimeFormat_. If _p_ is *"month"* <ins>and _rangeFormatOptions_ is *undefined*</ins>, then the String value may also depend on whether <ins>_dateTimeFormat_.[[Day]] is *undefined*</ins>. <ins>If _p_ is *"month"* and _rangeFormatOptions_ is not *undefined*, then the String value may also depend on whether _rangeFormatOptions_.[[day]] is *undefined*.</ins>  If _p_ is *"timeZoneName"*, then the String value may also depend on the value of the [[InDST]] field of _tm_. If _p_ is *"era"* <ins>and _rangeFormatOptions_ is *undefined*</ins>, then the String value may also depend on whether <ins>_dateTimeFormat_.[[Era]] is *undefined*</ins>. <ins>If _p_ is *"era"* and _rangeFormatOptions_ is not *undefined*, then the String value may also depend on whether _rangeFormatOptions_.[[era]] is *undefined*.</ins> If the implementation does not have a localized representation of _f_, then use _f_ itself.
             1. Append a new Record { [[Type]]: _p_, [[Value]]: _fv_ } as the last element of the list _result_.
           1. Else if _p_ is equal to *"ampm"*, then
             1. Let _v_ be _tm_.[[Hour]].
@@ -500,7 +500,7 @@ contributors: Google, Ecma International
           1. <ins>Else,</ins>
             1. <ins>Let _z_ be _y_.</ins>
           1. <ins>Let _patternParts_ be PartitionPattern(_pattern_).</ins>
-          1. <ins>Let _partResult_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _z_, _rangePatternPart_).</ins>
+          1. <ins>Let _partResult_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _z_, _rangePattern_).</ins>
           1. <ins>For each _r_ in _partResult_, do</ins>
             1. <ins>Set _r_.[[Source]] to _source_.</ins>
           1. <ins>Add all elements in _partResult_ to _result_ in order.</ins>
@@ -785,7 +785,7 @@ contributors: Google, Ecma International
                         </ul>
                     </ul>
                   </li>
-                  <li><ins>The [[rangePatterns]] record must have a [[Default]] field which contains the default range pattern used when the specific range pattern is not available. It's value is a list of records with the same structure as the other fields in the [[rangePatterns]] record.</ins></li>
+                  <li><ins>The [[rangePatterns]] record must have a [[Default]] field which contains the default range pattern used when the specific range pattern is not available. It's value is a list of records with the same structure as the other fields in the [[rangePatterns]] record.</ins></li>                  
                 </ul>
             </li>
             <li><ins>If the record has an hour field, it must also have a [[rangePatterns12]] field. It's value is similar to the Record in [[rangePatterns]], but it uses a String similar to [[pattern12]] for each part of the range pattern.</ins></li>
@@ -798,37 +798,28 @@ contributors: Google, Ecma International
         EXAMPLE     An implementation might include the following record as part of its English locale data: <del>{[[hour]]: *"numeric"*, [[minute]]: *"2-digit"*, [[second]]: *"2-digit"*, [[pattern]]: *"{hour}:{minute}:{second}"*, [[pattern12]]: *"{hour}:{minute}:{second} {ampm}"*}.</del>
 
         <ul>
-          <li><ins>[[year]]: *"2-digit"*</ins></li>
-          <li><ins>[[month]]: *"numeric"*</ins></li>
-          <li><ins>[[day]]: *"numeric"*</ins></li>
           <li><ins>[[hour]]: *"numeric"*</ins></li>
           <li><ins>[[minute]]: *"numeric"*</ins></li>
-          <li><ins>[[pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*</ins></li>
-          <li><ins>[[pattern12]]: *"{day}/{month}/{year}, {hour}:{minute} {ampm}"*</ins></li>
+          <li><ins>[[pattern]]: *"{hour}:{minute}"*</ins></li>
+          <li><ins>[[pattern12]]: *"{hour}:{minute} {ampm}"*</ins></li>
           <li><ins>[[rangePatterns]]: </ins></li>
           <ul>
             <li><ins>[[Hour]]:</ins><ul>
-              <li><ins>[[year]]: *"2-digit"*</ins></li>
-              <li><ins>[[month]]: *"numeric"*</ins></li>
-              <li><ins>[[day]]: *"numeric"*</ins></li>
               <li><ins>[[hour]]: *"numeric"*</ins></li>
               <li><ins>[[minute]]: *"numeric"*</ins></li>
               <li><ins>[[PatternParts]]:</ins></li>
               <ul>
-                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
                 <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
                 <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
               </ul>
             </ul></li>
             <li><ins>[[Minute]]:</ins><ul>
-              <li><ins>[[year]]: *"2-digit"*</ins></li>
-              <li><ins>[[month]]: *"numeric"*</ins></li>
-              <li><ins>[[day]]: *"numeric"*</ins></li>
               <li><ins>[[hour]]: *"numeric"*</ins></li>
               <li><ins>[[minute]]: *"numeric"*</ins></li>
               <li><ins>[[PatternParts]]:</ins></li>
               <ul>
-                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
                 <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
                 <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
               </ul>
@@ -850,28 +841,22 @@ contributors: Google, Ecma International
           <li><ins>[[rangePatterns12]]:</ins>
           <ul>
             <li><ins>[[Hour]]:</ins><ul>
-              <li><ins>[[year]]: *"2-digit"*</ins></li>
-              <li><ins>[[month]]: *"numeric"*</ins></li>
-              <li><ins>[[day]]: *"numeric"*</ins></li>
               <li><ins>[[hour]]: *"numeric"*</ins></li>
               <li><ins>[[minute]]: *"numeric"*</ins></li>
               <li><ins>[[PatternParts]]:</ins></li>
               <ul>
-                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
                 <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
                 <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
                 <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" {ampm}"*}</ins></li>
               </ul>
             </ul></li>
             <li><ins>[[Minute]]:</ins><ul>
-              <li><ins>[[year]]: *"2-digit"*</ins></li>
-              <li><ins>[[month]]: *"numeric"*</ins></li>
-              <li><ins>[[day]]: *"numeric"*</ins></li>
               <li><ins>[[hour]]: *"numeric"*</ins></li>
               <li><ins>[[minute]]: *"numeric"*</ins></li>
               <li><ins>[[PatternParts]]:</ins></li>
               <ul>
-                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{day}/{month}/{year}, {hour}:{minute}"*}</ins></li>
+                <li><ins>{[[Source]]: *"startRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
                 <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" – "*}</ins></li>
                 <li><ins>{[[Source]]: *"endRange"*, [[Pattern]]: *"{hour}:{minute}"*}</ins></li>
                 <li><ins>{[[Source]]: *"shared"*, [[Pattern]]: *" {ampm}"*}</ins></li>
