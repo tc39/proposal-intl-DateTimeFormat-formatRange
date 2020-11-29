@@ -439,7 +439,6 @@ contributors: Google, Ecma International
         1. <ins>If _x_ is greater than _y_, throw a *RangeError* exception.</ins>
         1. <ins>Let _tm1_ be ToLocalTime(_x_, _dateTimeFormat_.[[Calendar]], _dateTimeFormat_.[[TimeZone]]).</ins>
         1. <ins>Let _tm2_ be ToLocalTime(_y_, _dateTimeFormat_.[[Calendar]], _dateTimeFormat_.[[TimeZone]]).</ins>
-        1. <ins>Let _pattern_ be _dateTimeFormat_.[[Pattern]].</ins>
         1. <ins>Let _rangePatterns_ be _dateTimeFormat_.[[RangePatterns]].</ins>
         1. <ins>Let _rangePattern_ be *undefined*.</ins>
         1. <ins>Let _dateFieldsPracticallyEqual_ be *true*.</ins>
@@ -465,7 +464,9 @@ contributors: Google, Ecma International
               1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
             1. <ins>Let _rangePattern_ be _rp_.</ins>
         1. <ins>If _dateFieldsPracticallyEqual_ is *true*, then</ins>
-          1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _pattern_, _tm1_).</ins>
+          1. <ins>Let _pattern_ be _dateTimeFormat_.[[Pattern]].</ins>
+          1. <ins>Let _patternParts_ be PartitionPattern(_pattern_).</ins>
+          1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _tm1_).</ins>
           1. <ins>For each _r_ in _result_ do</ins>
             1. <ins>Set _r_.[[Source]] to *"shared"*.</ins>
           1. <ins>Return _result_.</ins>
