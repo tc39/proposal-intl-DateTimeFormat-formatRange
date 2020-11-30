@@ -455,6 +455,21 @@ contributors: Google, Ecma International
               1. <ins>If _v1_ is greater than 11 and _v2_ less or equal than 11, or _v1_ is less or equal than 11 and _v2_ is greater than 11, then</ins>
                 1. <ins>Set _dateFieldsPracticallyEqual_ to *false*.</ins>
               1. <ins>Let _rangePattern_ be _rp_.</ins>
+          1. <ins>If _fieldName_ is equal to [[FractionalSecondDigits]], then</ins>
+            1. <ins>Let _rp_ be _rangePatterns_.[[FractionalSecondDigits]].</ins>
+            1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
+              1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
+            1. <ins>Else,</ins>
+              1. <ins>Let _fractionalSecondDigits_ be _dateTimeFormat_.[[FractionalSecondDigits]].</ins>
+              1. <ins>If _fractionalSecondDigits_ is *undefined*, then</ins>
+                1. <ins>Set _fractionalSecondDigits_ to 3.</ins>
+              1. <ins>Let _v1_ be _tm1_.[[Millisecond]].</ins>
+              1. <ins>Let _v2_ be _tm2_.[[Millisecond]].</ins>
+              1. <ins>Let _v1_ be floor(_v1_ × 10<sup>( _fractionalSecondDigits_ - 3 )</sup>).</ins>
+              1. <ins>Let _v2_ be floor(_v2_ × 10<sup>( _fractionalSecondDigits_ - 3 )</sup>).</ins>
+              1. <ins>If _v1_ is not equal to _v2_, then</ins>
+                1. <ins>Set _dateFieldsPracticallyEqual_ to *false*.</ins>
+              1. <ins>Let _rangePattern_ be _rp_.</ins>
           1. <ins>Else,</ins>
             1. <ins>Let _rp_ be _rangePatterns_.[[<_fieldName_>]].</ins>
             1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
@@ -870,6 +885,10 @@ contributors: Google, Ecma International
           <tr>
             <td>[[Second]]</td>
             <td>*"second"*</td>
+          </tr>
+          <tr>
+            <td>[[FractionalSecondDigits]]</td>
+            <td>*"fractionalSecondDigits"*</td>
           </tr>
         </table>
         </ins>
