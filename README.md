@@ -62,6 +62,8 @@ overhead.
 
 * Initial Discussion: https://github.com/tc39/ecma402/issues/188
 
+Polyfill: [@formatjs/intl-datetimeformat](https://www.npmjs.com/package/@formatjs/intl-datetimeformat)
+
 ## Proposal
 
 Add `formatRange(date1, date2)` and `formatRangeToParts(date1, date2)` to
