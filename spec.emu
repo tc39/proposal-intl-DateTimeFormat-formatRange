@@ -326,6 +326,7 @@ contributors: Google, Ecma International
             1. Let _fv_ be FormatNumeric(_nf3_, _v_).
             1. Append a new Record { [[Type]]: *"fractionalSecond"*, [[Value]]: _fv_ } as the last element of _result_.
           1. Else if _p_ matches a Property column of the row in <emu-xref href="#table-datetimeformat-components"></emu-xref>, then
+            1. Let _f_ be the value of _dateTimeFormat_'s internal slot whose name is the Internal Slot column of the matching row.
             1. Let _v_ be the value of _tm_'s field whose name is the Internal Slot column of the matching row.
             1. If _p_ is *"year"* and _v_ ≤ 0, let _v_ be 1 - _v_.
             1. If _p_ is *"month"*, increase _v_ by 1.
@@ -380,7 +381,7 @@ contributors: Google, Ecma International
 
       <emu-alg>
         1. Let _patternParts_ be PartitionPattern(_dateTimeFormat_.[[Pattern]]).
-        1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _tm_).</ins>
+        1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _x_).</ins>
         1. Return _result_.
       </emu-alg>
 
@@ -483,7 +484,7 @@ contributors: Google, Ecma International
         1. <ins>If _dateFieldsPracticallyEqual_ is *true*, then</ins>
           1. <ins>Let _pattern_ be _dateTimeFormat_.[[Pattern]].</ins>
           1. <ins>Let _patternParts_ be PartitionPattern(_pattern_).</ins>
-          1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _tm1_).</ins>
+          1. <ins>Let _result_ be ? FormatDateTimePattern(_dateTimeFormat_, _patternParts_, _x_).</ins>
           1. <ins>For each _r_ in _result_ do</ins>
             1. <ins>Set _r_.[[Source]] to *"shared"*.</ins>
           1. <ins>Return _result_.</ins>
