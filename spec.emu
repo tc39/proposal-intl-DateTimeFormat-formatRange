@@ -253,14 +253,16 @@ contributors: Google, Ecma International
           1. Let _dateFormat_ be _dataLocaleData_.[[DateFormat]].[[&lt;_dateStyle_&gt;]].
         1. If _dateStyle_ is not *undefined* and _timeStyle_ is not *undefined*, then
           1. Let _format_ be a new Record.
-          1. Add to _format_ all fields from _dateFormat_ except [[pattern]].
-          1. Add to _format_ all fields from _timeFormat_ except [[pattern]] and [[pattern12]], if present.
+          1. Add to _format_ all fields from _dateFormat_ except [[pattern]] <ins>and [[rangePatterns]]</ins>.
+          1. Add to _format_ all fields from _timeFormat_ except [[pattern]], <ins>[[rangePatterns]],</ins> [[pattern12]] <ins>and [[rangePatterns12]]</ins>, if present.
           1. Let _connector_ be _dataLocaleData_.[[DateTimeFormat]].[[&lt;_dateStyle_&gt;]].
           1. Let _pattern_ be the string _connector_ with the substring *"{0}"* replaced with _timeFormat_.[[pattern]] and the substring *"{1}"* replaced with _dateFormat_.[[pattern]].
           1. Set _format_.[[pattern]] to _pattern_.
           1. If _timeFormat_ has a [[pattern12]] field, then
             1. Let _pattern12_ be the string _connector_ with the substring *"{0}"* replaced with _timeFormat_.[[pattern12]] and the substring *"{1}"* replaced with _dateFormat_.[[pattern]].
             1. Set _format_.[[pattern12]] to _pattern12_.
+          1. <ins>Let _dateTimeRangeFormat_ be _dataLocaleData_.[[DateTimeRangeFormat]].[[&lt;_dateStyle_&gt;]].[[&lt;_timeStyle_&gt;]]</ins>
+          1. <ins>Add to _format_ all fields from _dateTimeRangeFormat_ including [[rangePatterns]] and [[rangePatterns12]], if present.</ins>
           1. Return _format_.
         1. If _timeStyle_ is not *undefined*, then
           1. Return _timeFormat_.
@@ -851,7 +853,14 @@ contributors: Google, Ecma International
           </ol>
         </li>
         <li>
-          [[LocaleData]][&lt;_locale_&gt;] must have a [[styles]] field. The styles field must have a [[&lt;_calendar_&gt;]] field for all calendar values _calendar_. The field must contain [[DateFormat]], [[TimeFormat]] and [[DateTimeFormat]] fields, the value of these fields are Records, where each of which has [[full]], [[long]], [[medium]] and [[short]] fields. For [[DateFormat]] and [[TimeFormat]], the value of these fields must be a record, which has a subset of the fields shown in Table 1, where each field must have one of the values specified for the field in Table 1. Each of the records must also have a pattern field, whose value is a String value that contains for each of the date and time format component fields of the record a substring starting with *"{"*, followed by the name of the field, followed by *"}"*. If the record has an hour field, it must also have a pattern12 field, whose value is a String value that, in addition to the substrings of the pattern field, contains a substring *"{ampm}"*. For [[DateTimeFormat]], the field value must be a string pattern which contains the strings *"{0}"* and *"{1}"*.
+          [[LocaleData]][&lt;_locale_&gt;] must have a [[styles]] field. The styles field must have a [[&lt;_calendar_&gt;]] field for all calendar values _calendar_. The field must contain [[DateFormat]], [[TimeFormat]], [[DateTimeFormat]] <ins>and [[DateTimeRangeFormat]]</ins> fields, the value of these fields are Records, where each of which has [[full]], [[long]], [[medium]] and [[short]] fields. For [[DateFormat]] and [[TimeFormat]], the value of these fields must be a record, which has a subset of the fields shown in Table 1, where each field must have one of the values specified for the field in Table 1. Each of the records must also have <ins>the following fields:</ins>
+          <ol>
+            <li>A [[pattern]] field, whose value is a String value that contains for each of the date and time format component fields of the record a substring starting with *"{"*, followed by the name of the field, followed by *"}"*.</li>
+            <li>If the record has an hour field, it must also have a [[pattern12]] field, whose value is a String value that, in addition to the substrings of the pattern field, contains a substring *"{ampm}"*.</li>
+            <li><ins>A [[rangePatterns]] field that contains a record similar to the one described in the [[formats]] field.</ins></li>
+            <li><ins>If the record has an hour field, it must also have a [[rangePatterns12]] field. It's value is similar to the record in [[rangePatterns]] but it uses a string similar to [[pattern12]] for each range pattern.</ins></li>
+          </ol>
+          For [[DateTimeFormat]], the field value must be a string pattern which contains the strings *"{0}"* and *"{1}"*. <ins>For [[DateTimeRangeFormat]] the value of these fields must be a nested record which also has a [[full]], [[long]], [[medium]] and [[short]] fields. The [[full]], [[long]], [[medium]] and [[short]] fields in the enclosing record refer to the date style of the range pattern, while the fields in the nested record refers to the time style of the range pattern. The value of these fields in the nested record is a record with a [[rangePatterns]] field and a [[rangePatterns12]] which are similar to the [[rangePatterns]] and [rangePatterns12]] fields in [[DateFormat]] and [[TimeFormat]].</ins>
          </li>
       </ul>
 
