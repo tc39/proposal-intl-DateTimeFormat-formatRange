@@ -483,7 +483,7 @@ contributors: Google, Ecma International
       <p>
         <ins>The PartitionDateTimeRangePattern abstract operation is called with arguments _dateTimeFormat_ (which must be an object initialized as a DateTimeFormat), _x_ (which must be a Number value) and _y_ (which must be a Number value), interprets _x_ and _y_ as time values as specified in ES2021, <emu-xref href="#sec-time-values-and-time-range"></emu-xref>, and creates the corresponding parts according to the effective locale and the formatting options of _dateTimeFormat_. The following steps are taken:</ins>
       </p>
-      <emu-alg>          
+      <emu-alg>
         1. <ins>Let _x_ be TimeClip(_x_).</ins>
         1. <ins>If _x_ is *NaN*, throw a *RangeError* exception.</ins>
         1. <ins>Let _y_ be TimeClip(_y_).</ins>
@@ -500,7 +500,7 @@ contributors: Google, Ecma International
           1. <ins>If _fieldName_ is equal to [[AmPm]], then</ins>
             1. <ins>Let _rp_ be _rangePatterns_.[[AmPm]].</ins>
             1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
-              1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
+              1. <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
             1. <ins>Else,</ins>
               1. <ins>Let _v1_ be _tm1_.[[Hour]].</ins>
               1. <ins>Let _v2_ be _tm2_.[[Hour]].</ins>
@@ -510,7 +510,7 @@ contributors: Google, Ecma International
           1. <ins>If _fieldName_ is equal to [[FractionalSecondDigits]], then</ins>
             1. <ins>Let _rp_ be _rangePatterns_.[[FractionalSecondDigits]].</ins>
             1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
-              1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
+              1. <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
             1. <ins>Else,</ins>
               1. <ins>Let _fractionalSecondDigits_ be _dateTimeFormat_.[[FractionalSecondDigits]].</ins>
               1. <ins>If _fractionalSecondDigits_ is *undefined*, then</ins>
@@ -525,7 +525,7 @@ contributors: Google, Ecma International
           1. <ins>Else,</ins>
             1. <ins>Let _rp_ be _rangePatterns_.[[<_fieldName_>]].</ins>
             1. <ins>If _rangePattern_ is not *undefined* and _rp_ is *undefined*, then</ins>
-              1.  <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
+              1. <ins>Set _patternContainsLargerDateField_ to *true*.</ins>
             1. <ins>Else,</ins>
               1. <ins>Let _v1_ be _tm1_.[[<_fieldName_>]].</ins>
               1. <ins>Let _v2_ be _tm2_.[[<_fieldName_>]].</ins>
@@ -824,7 +824,7 @@ contributors: Google, Ecma International
             <li>dayPeriod, hour, minute, second</li>
             <li>dayPeriod, hour, minute</li>
           </ul>
-          Each of the records must also have <ins>the following fields:</ins> 
+          Each of the records must also have <ins>the following fields:</ins>
           <ol>
             <li>A [[pattern]] field, whose value is a String value that contains for each of the date and time format component fields of the record a substring starting with *"{"*, followed by the name of the field, followed by *"}"*.</li>
             <li>If the record has an hour field, it must also have a [[pattern12]] field, whose value is a String value that, in addition to the substrings of the [[pattern]] field, contains a substring *"{ampm}"*.</li>
@@ -1029,7 +1029,7 @@ contributors: Google, Ecma International
     </emu-clause>
 
     <emu-clause id="sec-intl.datetimeformat.prototype.formatRange">
-      <h1><ins>Intl.DateTimeFormat.prototype.formatRange ( _startDate_ , _endDate_ )</ins></h1>
+      <h1><ins>Intl.DateTimeFormat.prototype.formatRange ( _startDate_, _endDate_ )</ins></h1>
 
       <p>
         <ins>When the `formatRange` method is called with an arguments _startDate_ and _endDate_, the following steps are taken:</ins>
@@ -1046,7 +1046,7 @@ contributors: Google, Ecma International
     </emu-clause>
 
     <emu-clause id="sec-Intl.DateTimeFormat.prototype.formatRangeToParts">
-      <h1><ins>Intl.DateTimeFormat.prototype.formatRangeToParts ( _startDate_ , _endDate_ )</ins></h1>
+      <h1><ins>Intl.DateTimeFormat.prototype.formatRangeToParts ( _startDate_, _endDate_ )</ins></h1>
 
       <p>
         <ins>When the `formatRangeToParts` method is called with an arguments _startDate_ and _endDate_, the following steps are taken:</ins>
