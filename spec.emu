@@ -293,7 +293,7 @@ contributors: Google, Ecma International
       <h1><ins>FormatDateTimePattern ( _dateTimeFormat_, _patternParts_, _x_, _rangeFormatOptions_ )</ins></h1>
 
       <p>
-        <ins>The FormatDateTimePattern abstract operation is called with arguments _dateTimeFormat_ (which must be an object initialized as a DateTimeFormat), _patternParts_ (which is a list of Records as returned by PartitionPattern), _x_ (which must be a Number value) and _rangeFormatOptions_ (which is a range pattern Record as used in [[rangePattern]] or *undefined*), interprets _x_ as a time value as specified in ES2015, <emu-xref href="#sec-time-values-and-time-range"></emu-xref>, and creates the corresponding parts according _pattern_ and to the effective locale and the formatting options of _dateTimeFormat_ and _rangeFormatOptions_. The following steps are taken:</ins>
+        <ins>The FormatDateTimePattern abstract operation is called with arguments _dateTimeFormat_ (which must be an object initialized as a DateTimeFormat), _patternParts_ (which is a list of Records as returned by PartitionPattern), _x_ (which must be a Number value), and _rangeFormatOptions_ (which is a range pattern Record as used in [[rangePattern]] or *undefined*), interprets _x_ as a time value as specified in ES2021, <emu-xref href="#sec-time-values-and-time-range"></emu-xref>, and creates the corresponding parts according _pattern_ and to the effective locale and the formatting options of _dateTimeFormat_ and _rangeFormatOptions_. The following steps are taken:</ins>
       </p>
 
       <emu-alg>
