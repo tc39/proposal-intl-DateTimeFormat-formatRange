@@ -58,9 +58,10 @@ overhead.
 
 ### Status
 
-**Stage 3**
+**Stage 4**
 
 * Initial Discussion: https://github.com/tc39/ecma402/issues/188
+* PR: https://github.com/tc39/ecma402/pull/532 (merged)
 
 Polyfill: [@formatjs/intl-datetimeformat](https://www.npmjs.com/package/@formatjs/intl-datetimeformat)
 
